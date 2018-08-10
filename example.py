@@ -4,7 +4,7 @@ import imutils
 from cv_plinko import PlinkoBoard
 
 ap = argparse.ArgumentParser()
-ap.add_argument('-i', '--input', default='images/cat.jpg',
+ap.add_argument('-i', '--input', default='images/pyimage_combo.png',
                 help='Path to input image to be used as game board.')
 ap.add_argument('-w', '--width', default=600, type=int,
                 help='Width to resize input image to (use 0 no resize)')

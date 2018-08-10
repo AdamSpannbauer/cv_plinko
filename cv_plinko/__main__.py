@@ -1,14 +1,18 @@
 import argparse
 import cv2
-from .plinko_board import create_edge_map
+import imutils
+from .plinko_board_class import PlinkoBoard
 
 ap = argparse.ArgumentParser()
-ap.add_argument('-i', '--input', default='../images/pyimage_combo.png',
+ap.add_argument('-i', '--input', required=True,
                 help='Path to input image to be used as game board.')
+ap.add_argument('-w', '--width', default=600, type=int,
+                help='Width to resize input image to (use 0 no resize)')
 args = vars(ap.parse_args())
 
 image = cv2.imread(args['input'])
-edge_map = create_edge_map(image)
+if args['width'] > 0:
+    image = imutils.resize(image, width=args['width'])
 
-cv2.imshow('...', image)
-cv2.waitKey(0)
+plinko = PlinkoBoard(image)
+plinko.play()

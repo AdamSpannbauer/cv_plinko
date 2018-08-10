@@ -33,18 +33,9 @@ class PlinkoBoard:
         gate_edges = list(range(0, w, gate_width)) + [w]
         for x0, x1 in zip(gate_edges[:-1], gate_edges[1:]):
             gate = Gate(x0, x1, h - 20, h)
+            gate.draw(self.image)
+            gate.draw(edge_map)
             self.gates.append(gate)
-            cv2.putText(edge_map, str(gate.value), (x0 + 3, h - 5),
-                        cv2.FONT_HERSHEY_SIMPLEX, .5, (250, 250, 250), thickness=2)
-            cv2.putText(edge_map, str(gate.value), (x0 + 3, h - 5),
-                        cv2.FONT_HERSHEY_SIMPLEX, .5, (0, 0, 0), thickness=1)
-            cv2.putText(self.image, str(gate.value), (x0 + 3, h - 5),
-                        cv2.FONT_HERSHEY_SIMPLEX, .5, (250, 250, 250), thickness=2)
-            cv2.putText(self.image, str(gate.value), (x0 + 3, h - 5),
-                        cv2.FONT_HERSHEY_SIMPLEX, .5, (0, 0, 0), thickness=1)
-
-            self.draw_bordered_line(edge_map, (x1, h), (x1, h - 20), 255, 0, 3, 1)
-            self.draw_bordered_line(self.image, (x1, h), (x1, h - 20), (255, 255, 255), (0, 0, 0), 3, 1)
 
         self.draw_bordered_line(edge_map, (0, h - 2), (w, h - 2), 255, 0, 3, 1)
         self.draw_bordered_line(self.image, (0, h - 2), (w, h - 2), (255, 255, 255), (0, 0, 0), 3, 1)
