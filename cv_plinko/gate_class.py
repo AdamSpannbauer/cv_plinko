@@ -23,4 +23,3 @@ class Gate:
 
         cv2.line(image, (self.x1, self.y1), (self.x1, self.y0), (255, 255, 255), 3)
         cv2.line(image, (self.x1, self.y1), (self.x1, self.y0), (0, 0, 0), 1)
-

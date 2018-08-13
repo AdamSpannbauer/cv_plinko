@@ -14,19 +14,20 @@ class GamePiece:
         else:
             self.color = color
         self.border_color = tuple(np.random.randint(256) for _ in range(3))
-
         self.location = np.array([np.random.randint(radius + 1, self.board_w - radius), 0], dtype='float')
         self.loc_hist = deque(maxlen=60)
         self.is_stagnant = False
+        self.stagnant_counter = 0
         self.in_play = True
         self.velocity = np.array([0, 0], dtype='float')
         self.gravity = np.array([0, 0.3], dtype='float')
         self.speed_limit = 3
 
     def show(self, game_board):
-        location = self.location.astype('int')
-        cv2.circle(game_board, tuple(location), self.radius + 1, self.border_color, -1)
-        cv2.circle(game_board, tuple(location), self.radius, self.color, -1)
+        if self.stagnant_counter <= 30:
+            location = self.location.astype('int')
+            cv2.circle(game_board, tuple(location), self.radius + 1, self.border_color, -1)
+            cv2.circle(game_board, tuple(location), self.radius, self.color, -1)
 
     def update(self):
         self.loc_hist.append(self.location.copy())
@@ -36,6 +37,8 @@ class GamePiece:
             self.bounce()
             self.bound_velocity()
             self.location += self.velocity
+        else:
+            self.stagnant_counter += 1
 
     def check_stagnant(self):
         if len(self.loc_hist) == self.loc_hist.maxlen:
@@ -78,7 +81,3 @@ class GamePiece:
 
     def bound_velocity(self):
         self.velocity = np.clip(self.velocity, -self.speed_limit, self.speed_limit)
-
-    def new_bounce(self, cor=0.5):
-        v = self.mass * self.velocity + 500 * cor * (-self.velocity) / self.mass
-        print(v)
