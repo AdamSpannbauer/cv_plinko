@@ -6,6 +6,8 @@ Convert images/videos into plinko boards with Python + OpenCV.
 
 ## Example output
 
+#### Static Images
+
 The below output was created using the below command with [this input image](images/pyimage_combo.png).
 
 ```bash
@@ -13,5 +15,17 @@ The below output was created using the below command with [this input image](ima
 ```
 
 <p align='center'>
-<img src='readme/image_example.gif' width=80%>
+<img src='readme/image_example.gif' width=70%>
+</p>
+
+#### Video/Webcam
+
+The below output was created using the below command with a webcam.
+
+```bash
+ python -m cv_plinko -i 0
+```
+
+<p align='center'>
+<img src='readme/video_example.gif' width=70%>
 </p>
