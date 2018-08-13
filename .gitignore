@@ -1,5 +1,5 @@
-# keynote
-*.key
+# social media posting
+social_media/*
 
 # pycharm
 .idea/*
