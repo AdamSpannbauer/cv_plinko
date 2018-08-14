@@ -6,7 +6,7 @@ with open("cv_plinko/version.py") as f:
 
 setup(name='cv_plinko',
       version=version['__version__'],
-      description='Turn images into plinko games',
+      description='Turn images & videos into plinko boards.',
       author='Adam Spannbauer',
       author_email='spannbaueradam@gmail.com',
       url='https://github.com/AdamSpannbauer/cv_plinko',

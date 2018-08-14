@@ -4,11 +4,18 @@ import numpy as np
 
 
 class GamePiece:
-    def __init__(self, game_board, radius=6, mass=10, color=None):
+    """Class to simulate falling plinko game pieces
+
+    Not intended for general usage
+
+    :param game_board: BGR edge map that is being used as plinko board
+    :param radius: game piece radius size in pixels
+    :param color: game piece color (as BGR), if None then color is randomly chosen
+    """
+    def __init__(self, game_board, radius=6, color=None):
         self.board = game_board
         self.board_h, self.board_w = game_board.shape[:2]
         self.radius = radius
-        self.mass = mass
         if color is None:
             self.color = tuple(np.random.randint(256) for _ in range(3))
         else:
@@ -24,12 +31,21 @@ class GamePiece:
         self.speed_limit = 3
 
     def show(self, game_board):
+        """Draw game piece on game board
+
+        :param game_board: cv2 image to draw game piece on
+        :return: None; modifies game board in place
+        """
         if self.stagnant_counter <= 30:
             location = self.location.astype('int')
             cv2.circle(game_board, tuple(location), self.radius + 1, self.border_color, -1)
             cv2.circle(game_board, tuple(location), self.radius, self.color, -1)
 
     def update(self):
+        """Update game piece physics/location
+
+        :return: None; updates game piece physics attributes
+        """
         self.loc_hist.append(self.location.copy())
         self.check_stagnant()
         if not self.is_stagnant:
@@ -41,6 +57,10 @@ class GamePiece:
             self.stagnant_counter += 1
 
     def check_stagnant(self):
+        """Check if game piece has not had meaningful movement in past n updates
+
+        :return: None; updates GamePiece.is_stagnant attribute
+        """
         if len(self.loc_hist) == self.loc_hist.maxlen:
             delta_loc = self.loc_hist[0] - self.loc_hist[-1]
             max_move = max(abs(delta_loc))
@@ -48,12 +68,20 @@ class GamePiece:
                 self.is_stagnant = True
 
     def fall(self):
+        """Update velocity to simulate falling
+
+        :return: None; updates GamePiece.velocity attribute
+        """
         self.velocity += self.gravity
         self.velocity *= np.array([0.975, 1])
         if np.random.random() > 0.8:
             self.velocity += np.array([(np.random.random() - 0.5) * 0.2, 0])
 
     def bounce(self):
+        """Update velocity to simulate bouncing off solid object
+
+        :return: None; updates GamePiece.velocity attribute
+        """
         location = self.location.astype('int')
         x1, y1 = tuple(location - self.radius)
         x2, y2 = tuple(location + self.radius)
@@ -80,4 +108,8 @@ class GamePiece:
                                       (-max(self.velocity) * 0.8, max(self.velocity) * 0.8))
 
     def bound_velocity(self):
+        """Update velocity to stay within predefined limits
+
+        :return: None; updates GamePiece.velocity attribute
+        """
         self.velocity = np.clip(self.velocity, -self.speed_limit, self.speed_limit)
